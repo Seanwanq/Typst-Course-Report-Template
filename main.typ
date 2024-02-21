@@ -2,14 +2,27 @@
 #import "@preview/codelst:2.0.0": sourcecode
 #import "template.typ": *
 
-#show: MSTemplate
+#import "codly.typ": *
 
-#Title(
+#show: codly-init.with()
+#codly(
+languages: (
+  cs: (name: "C#", color: rgb("#DEDADA8E")),
+  typ: (name: "Typst", color: rgb("#DEDADA8E")),
+  c: (name: "C", color: rgb("#DEDADA8E")),
+),
+display-icon: false,
+zebra-color: white,
+breakable: true
+)
+
+#show: MSTemplate.with(
   reportName: "Template homework",
-  studentName: "Andre F. V. Matias",
+  authorName: "Andre F. V. Matias",
   courseName: "Modeling and Simulations",
   professor: "Prof. dr. it. Marjolein Dijksta and Dr. Laura Filion",
-  date: "April 25th, 1974"
+  date: "April 25th, 1974",
+  IsComplexEquationNumberingOn: true
 )
 
 = The basics
@@ -21,27 +34,27 @@ After opening this project in typst online editor, the first thing to edit is th
 The inclusion of figures needs to be inside the environment _figure_. You can see an example below.
 
 
-#ImageBlock(
-  position: "h",
+#FigureBlock(
   captionAlign: "l",
 )[
   #figure(
+    placement: none,
     image("figures/swallow.jpg", width: 60%),
     caption: [
-      Figure caption edited here. The position of the image can be controlled by changing the `h` above. Use `t` for top of the page, `b` to bottom of the page, `h` to fix the position of the image, and `auto` to let typst decide. The alignment of caption can also be adjusted, by changing the `captionAlign` above, `l` indicates left, `r` indicates right, and `c` indicates center.
+      Figure caption edited here. The position of the image can be controlled by changing the `h` above. Use `t` for top of the page, `b` to bottom of the page, `h` to fix the position of the image, and `auto` to let typst decide. The alignment of caption can also be adjusted, by changing the `captionAlign` above, `l` indicates left, `r` indicates right, and `c` indicates center@FigureFunctionTypst.
     ]
   ) <figure>
 ]
 
+
 === Sub figures
 Multi figures can also be combined using the `subfigure` environment.
 
-#ImageBlock(
-  position: "auto",
+#FigureBlock(
   captionAlign: "c",
-  subfigures: true,
 )[
   #figure(
+    placement: auto,
     caption: [Pictures of animals.]
   )[
     #grid(
@@ -88,45 +101,38 @@ $
 $
 sum_x^2
 $<eq-1>
-Code like `<eq-1>` added labels to equations, figures, tables, etc. For equation, only those with labels will show reference numbering on the right. This method enables the referencing of equations using @eq-1. The same is true for figures (@figure, @fig:gull), tables (@table1), sections (@section), etc...
+Code like `<eq-1>` added labels to equations, figures, tables, etc. For equation, only those with labels will show reference numbering on the right. This method enables the referencing of equations using @eq-1. The same is true for figures (@figure, @fig:gull), tables (@table1), sections (@section), etc@ReferenceFunctionTypst...
 
 For more information see #link("https://typst.app/docs")[Typst documents] and #link("https://sitandr.github.io/typst-examples-book/book/about.html")[Typst example book].
 
 = Code snippets
-To include code snippets we use a 3#super[rd] party library called `codelst`. Import the library at the beginning of the document:
+To include code snippets we use a 3#super[rd] party library called `codly`. Import the library at the beginning of the document@CodlyREADMEMd:
 
-#figure[
-  #sourcecode[
-  ```typ
-  #import "@preview/codelst:2.0.0": sourcecode
-  ```
-]
-]
-And then you can write code like the example:
-#figure(
-  sourcecode[
-    ```c
-    // Simple C program to display "Hello World"
 
-    // Header file for input output functions
-    #include <stdio.h>
+```typ
+#import "codly.typ": *
+```
 
-    // main functions
-    // where the excution of program begins
-    int main(int argc, char* argv[])
-    {
-      // prints hello world
-      printf("Hello World");
-    }
 
-    return 0;
-    ```
-  ],
-  kind: "code",
-  supplement: "Listing",
-  caption: [Code caption]
-) <code1>
-For more information see #link("https://github.com/typst/packages/tree/main/packages/preview/codelst/2.0.0"). To refer it, use `@code1` to get @code1.
+And then you can write code like the example.
+
+```c
+// Simple C program to display "hello world"
+
+// Header file for input output functions
+#include <stdio.h>
+
+// main functions
+// where the excution of program begins
+int main()
+{
+  // prints hello world
+  printf("hello world");
+  return 0;
+}
+```
+
+For more information see #link("https://github.com/typst/packages/tree/main/packages/preview/codelst/2.0.0"). To refer it, use `@code1` to get .
 
 = Lists
 The inclusion of list, such as enumerate or bullet points are very easy to make.
@@ -157,13 +163,10 @@ Without an empty line between, it will be:
 
 = Tables
 Tables are generated with a 3#super[rd] party library called `tablex`. Import it at the top of the document using:
-#figure(
-  sourcecode[
+
     ```typ
-      #import "@preview/tablex:0.0.8": *
+#import "@preview/tablex:0.0.8": *
     ```
-  ]
-)
 Below is an example of a table.
 #show figure.where(
   kind: table
@@ -184,4 +187,5 @@ Below is an example of a table.
 ) <table1>
 For more complex configurations, please refer to #link("https://github.com/PgBiel/typst-tablex").
 
+#bibliography("Typst.bib", title: "References", style: "gb-7714-2005-numeric")
 

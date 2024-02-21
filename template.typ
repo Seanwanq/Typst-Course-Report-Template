@@ -1,9 +1,3 @@
-#let IsComplexEquationNumberingOn = true
-#let courseName = "Modeling and Simulations"
-#let reportName = "Template homework"
-#let authorName = "Author Name"
-
-
 #let subfigure(body, pos: bottom+center, dx: 0%, dy: 0%, caption: "", numbering: "(a)", separator: "", lbl: none, supplement: none) = {
   let fig = figure(body, caption: none, kind: "subfigure", supplement: none, numbering: numbering, outlined: false)
   
@@ -17,10 +11,26 @@
   return [ #fig #lbl \ #place(pos, dx: dx, dy: dy, caption)]
 }
 
-#let ImageBlock(
-  position: "h",
+#let CodeFrame(lang: none, body) = {
+  body
+  place(
+    right+top,
+    dx: -0.3em,
+    dy: 0.3em
+  )[
+    #block(
+      stroke: rgb("#B8B8B8")+0.5pt,
+      fill: rgb("#DEDADA8E"),
+      radius: 3.3pt,
+      inset: 0.1em
+    )[
+      #raw(lang)
+    ]
+  ]
+}
+
+#let FigureBlock(
   captionAlign: "l",
-  subfigures: false,
   body
   ) = {
     show figure.caption: it => [
@@ -45,25 +55,11 @@
       ]
     ]
 
-    if position == "h" {
-      body
-    } else if position == "t" {
-      place(top, float: true)[
-        #body
-      ]
-    } else if position == "b" {
-      place(bottom, float: true)[
-        #body
-      ]
-    } else if position == "auto" {
-      place(auto, float: true)[
-        #body
-      ]
-    }
+    body
 }
 
 
-#let MSTemplate(body) = [
+#let MSTemplate(reportName: "", authorName: "", professor: "", date: "", courseName: "", IsComplexEquationNumberingOn: true, body) = [
   #set page(
     paper: "a4",
     header: locate(loc => {
@@ -96,7 +92,7 @@
 
   #set text(
     size: 12pt,
-    font: "Linux Libertine"
+    font: "New Computer Modern"
   )
   #set par(
     justify: true,
@@ -180,7 +176,7 @@
       #link(
         el.location(), 
       )[
-        #text(font: "Linux Libertine", size: 12pt)[
+        #text(font: "New Computer Modern", size: 12pt)[
           Eq.
           #if IsComplexEquationNumberingOn == true [
             #numbering(
@@ -215,38 +211,44 @@
   }
 
   #show figure: it => {
-    if it.kind != "subfigure" {
+    if it.kind != "subfigure" and it.kind != "code" {
       locate(loc => {
         let q = query(figure.where(kind: "subfigure").after(loc), loc)
         if q.len() != 0 {
           q.first().counter.update(0)
         }
       })
+      it
+    } else if it.kind == "code" [
+      #it
+      #par()[#text(size: 0.5em)[#h(0.0em)]]
+     ] else {
+      it
     }
-    it
   }
 
   #show figure.where(
   kind: table
 ): set figure.caption(position: top)
 
+  #show heading: it => {
+    if it.level == 2 {
+      text(size: 12pt)[
+        #par()[#text(size: 0.5em)[#h(0.0em)]]
+        #v(0em)
+        #h(-1.5em + 5pt) #counter(heading).display("1.1.") #it.body.    
+      ]
+    } else if it.level > 2 {
+      text(size: 12pt)[
+        #par()[#text(size: 0.5em)[#h(0.0em)]]
+        #v(0em)
+        #h(-1.5em + 5pt) #emph[#counter(heading).display("1.1.1.") #it.body.]
+      ]
+    } else {
+      it
+    }
+  }
 
-  #show heading.where(
-    level: 2
-  ): it => text(size: 12pt)[
-    #par()[#text(size: 0.5em)[#h(0.0em)]]
-    #v(0em)
-    #h(-1.5em + 5pt) #counter(heading).display("1.1.") #it.body.    
-  ]
-
-  #show heading.where(
-    level: 3
-  ): it => text(size: 12pt)[
-    #par()[#text(size: 0.5em)[#h(0.0em)]]
-    #v(0em)
-    #h(-1.5em + 5pt) #emph[#counter(heading).display("1.1.1.") #it.body.]
-  ]
-  
   #show par: it => [
     #set block(above: 0.8em, below: 0.8em)
     #it
@@ -261,17 +263,7 @@
     }
   }
 
-  #body
-]
-
-#let Title(
-  reportName: "Template homework",
-  studentName: "Anyone",
-  courseName: "Modeling and Simulations",
-  professor: "Prof. dr. it. Marjolein Dijksta and Dr. Laura Filion",
-  date: "MM DD, YYYY"
-) = {
-  align(center)[
+  #align(center)[
     #block(
       breakable: true,
     )[
@@ -284,11 +276,11 @@
       #v(-2pt)
       #text(
         size: 21.5pt, 
-        weight: "medium"
+        weight: "semibold"
         )[#reportName] \
       #v(2pt)
       #text()[
-        Student name: _#studentName _
+        Student name: _#authorName _
       ]
       #v(-2pt)
       #line(length: 100%) 
@@ -297,6 +289,6 @@
       Due date: _#date _
     ]
   ]
-}
 
-
+  #body
+]
