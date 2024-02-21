@@ -1,20 +1,8 @@
 #import "@preview/tablex:0.0.8": *
-#import "@preview/codelst:2.0.0": sourcecode
 #import "template.typ": *
 
-#import "codly.typ": *
+#import "sourcerer.typ": *
 
-#show: codly-init.with()
-#codly(
-languages: (
-  cs: (name: "C#", color: rgb("#DEDADA8E")),
-  typ: (name: "Typst", color: rgb("#DEDADA8E")),
-  c: (name: "C", color: rgb("#DEDADA8E")),
-),
-display-icon: false,
-zebra-color: white,
-breakable: true
-)
 
 #show: MSTemplate.with(
   reportName: "Template homework",
@@ -109,14 +97,19 @@ For more information see #link("https://typst.app/docs")[Typst documents] and #l
 = Code snippets
 To include code snippets we use a 3#super[rd] party library called `codly`. Import the library at the beginning of the document@CodlyREADMEMd:
 
-
+#code(
+  lang: "Typst",
 ```typ
 #import "codly.typ": *
 ```
+)
 
 
 And then you can write code like the example.
 
+#figure(
+code(
+lang: "C",
 ```c
 // Simple C program to display "hello world"
 
@@ -132,8 +125,14 @@ int main()
   return 0;
 }
 ```
+),
+kind: "code",
+supplement: [Listing],
+caption: [A code listing.],
+placement: auto
+)<code1>
 
-For more information see #link("https://github.com/typst/packages/tree/main/packages/preview/codelst/2.0.0"). To refer it, use `@code1` to get .
+For more information see #link("https://github.com/typst/packages/tree/main/packages/preview/codelst/2.0.0"). To refer it, use `@code1` to get @code1.
 
 = Lists
 The inclusion of list, such as enumerate or bullet points are very easy to make.
@@ -165,9 +164,9 @@ Without an empty line between, it will be:
 = Tables
 Tables are generated with a 3#super[rd] party library called `tablex`. Import it at the top of the document using:
 
-    ```typ
-#import "@preview/tablex:0.0.8": *
-    ```
+//     ```typ
+// #import "@preview/tablex:0.0.8": *
+//     ```
 Below is an example of a table.
 #show figure.where(
   kind: table
