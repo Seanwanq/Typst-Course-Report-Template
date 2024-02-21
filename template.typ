@@ -59,7 +59,15 @@
 }
 
 
-#let MSTemplate(reportName: "", authorName: "", professor: "", date: "", courseName: "", IsComplexEquationNumberingOn: true, body) = [
+#let MSTemplate(
+  reportName: "",
+  authorName: "",
+  professor: "",
+  date: "",
+  courseName: "",
+  IsComplexEquationNumberingOn: true,
+  ShowProfessorName: true,
+  body) = [
   #set page(
     paper: "a4",
     header: locate(loc => {
@@ -285,7 +293,11 @@
       #v(-2pt)
       #line(length: 100%) 
       #v(-3pt)
+      #if ShowProfessorName == true [
       Course: _#courseName _ - Professor: _#professor _ \
+      ] else [
+        Course: _#courseName _ \
+      ]
       Due date: _#date _
     ]
   ]

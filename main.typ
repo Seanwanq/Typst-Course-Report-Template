@@ -22,7 +22,8 @@ breakable: true
   courseName: "Modeling and Simulations",
   professor: "Prof. dr. it. Marjolein Dijksta and Dr. Laura Filion",
   date: "April 25th, 1974",
-  IsComplexEquationNumberingOn: true
+  IsComplexEquationNumberingOn: true,
+  ShowProfessorName: false
 )
 
 = The basics
