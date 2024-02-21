@@ -58,6 +58,10 @@
     body
 }
 
+// For indent fixing.
+#let ForceParaBreak() = {
+  par()[#text(size: 0.5em)[#h(0.0em)]]
+}
 
 #let MSTemplate(
   reportName: "",
